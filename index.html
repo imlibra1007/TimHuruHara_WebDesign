@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchenphoria</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        header {
+            background-color: #ff6f61;
+            padding: 15px;
+            color: white;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .hero {
+            background-color: #f2d7d5;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .hero h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            font-size: 1em;
+            width: 300px;
+            max-width: 80%;
+        }
+
+        .search-bar button {
+            padding: 10px;
+            font-size: 1em;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .recipe-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .recipe-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            width: 250px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden; /* Prevent overflow of image */
+        }
+
+        .recipe-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .recipe-card img {
+            width: 100%;
+            height: auto; /* Ensures images fit the card */
+            object-fit: cover; /* Crop to fit without distortion */
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 30px;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .recipe-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* About and Contact Sections */
+        #about, #contact {
+            padding: 20px;
+            background-color: #f9f9f9;
+            margin: 20px 0;
+        }
+
+        #about h3, #contact h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Kitchenphoria</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Beranda</a></li>
+                <li><a href="#recipes">Resep</a></li>
+                <li><a href="#about">Tentang Kami</a></li>
+                <li><a href="#contact">Kontak</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h2>Temukan Resep Terbaik untuk Hidangan Anda</h2>
+        <form class="search-bar" onsubmit="searchRecipes(); return false;">
+            <input type="text" id="searchInput" placeholder="Cari resep...">
+            <button type="submit">Cari</button>
+        </form>
+    </section>
+
+    <!-- Recipe Section -->
+    <section id="recipes">
+        <h3>Resep Favorit Kami</h3>
+        <div class="recipe-grid" id="recipeGrid">
+            <!-- Recipe Cards with Clickable Functionality -->
+            <div class="recipe-card" onclick="showRecipeDetails('Spaghetti Carbonara')">
+                <img src="Carbonara.jpg" alt="Spaghetti Carbonara">
+                <h4>Spaghetti Carbonara</h4>
+            </div>
+            <div class="recipe-card" onclick="showRecipeDetails('Kari Ayam')">
+                <img src="KariAyam.jpg" alt="Kari Ayam">
+                <h4>Kari Ayam</h4>
+            </div>
+            <div class="recipe-card" onclick="showRecipeDetails('Pizza Vegetarian')">
+                <img src="pizza.jpg" alt="Pizza Vegetarian">
+                <h4>Pizza Vegetarian</h4>
+            </div>
+            <div class="recipe-card" onclick="showRecipeDetails('Beef Stroganoff')">
+                <img src="BeefStroganoff.jpg" alt="Beef Stroganoff">
+                <h4>Beef Stroganoff</h4>
+            </div>
+            <div class="recipe-card" onclick="showRecipeDetails('Salmon Panggang')">
+                <img src="GrilledSalmon.jpg" alt="Salmon Panggang">
+                <h4>Salmon Panggang</h4>
+            </div>
+            <div class="recipe-card" onclick="showRecipeDetails('Kue Cokelat')">
+                <img src="cake.jpg" alt="Kue Cokelat">
+                <h4>Kue Cokelat</h4>
+            </div>
+            <div class="recipe-card" onclick="showRecipeDetails('Sup Tomat')">
+                <img src="TomatoSoup.jpg" alt="Sup Tomat">
+                <h4>Sup Tomat</h4>
+            </div>
+            <div class="recipe-card" onclick="showRecipeDetails('Nasi Goreng')">
+                <img src="NasiGoreng.jpg" alt="Nasi Goreng">
+                <h4>Nasi Goreng</h4>
+            </div>
+            <div class="recipe-card" onclick="showRecipeDetails('Sate Ayam')">
+                <img src="ChickenSate.jpg" alt="Sate Ayam">
+                <h4>Sate Ayam</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about">
+        <h3>Tentang Kami</h3>
+        <p>Kitchenphoria adalah platform berbagi resep makanan yang didedikasikan untuk membantu Anda menemukan resep terbaik untuk hidangan sehari-hari. Kami menyediakan berbagai macam resep, mulai dari hidangan lokal hingga internasional, lengkap dengan panduan memasak yang mudah diikuti. Dengan misi kami untuk meningkatkan pengalaman memasak di rumah, kami selalu berusaha menyajikan resep-resep dengan bahan yang sederhana namun penuh rasa.</p>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section id="contact">
+        <h3>Kontak Kami</h3>
+        <p>Jika Anda memiliki pertanyaan, masukan, atau ingin berbagi resep, jangan ragu untuk menghubungi kami!</p>
+        <ul>
+            <li>Email: kitchenporia@gmail.com</li>
+            <li>Telepon: +62-812-3456-7890</li>
+            <li>Alamat: Jl. Masakan No. 123, Surabaya, Indonesia</li>
+        </ul>
+    </section>
+
+    <!-- Modal for Recipe Details -->
+    <div id="recipeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="recipeTitle"></h2>
+            <h3>Bahan-bahan:</h3>
+            <ul id="recipeIngredients"></ul>
+            <h3>Cara Memasak:</h3>
+            <p id="recipeInstructions"></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Kitchenphoria. Semua hak cipta dilindungi.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Recipe Data
+        const recipes = {
+            "Spaghetti Carbonara": {
+                ingredients: [
+                    "200g Spaghetti",
+                    "100g Daging asap",
+                    "2 telur",
+                    "50g Keju parmesan",
+                    "2 siung bawang putih",
+                    "Garam dan lada"
+                ],
+                instructions: `1. Rebus spaghetti hingga al dente.
+                2. Tumis daging asap dan bawang putih hingga harum.
+                3. Campurkan telur dan keju dalam mangkuk.
+                4. Masukkan spaghetti dan campuran telur ke dalam wajan, aduk cepat.
+                5. Bumbui dengan garam dan lada.`
+            },
+            "Kari Ayam": {
+                ingredients: [
+                    "500g Daging ayam",
+                    "2 sdm bubuk kari",
+                    "400ml Santan",
+                    "1 bawang bombay",
+                    "2 siung bawang putih",
+                    "Garam dan gula"
+                ],
+                instructions: `1. Tumis bawang bombay dan bawang putih hingga harum.
+                2. Masukkan ayam dan masak hingga berubah warna.
+                3. Tambahkan bubuk kari dan santan, masak hingga ayam matang sempurna.
+                4. Bumbui dengan garam dan gula, masak sebentar lagi.`
+            },
+            "Pizza Vegetarian": {
+                ingredients: [
+                    "200g Tepung terigu",
+                    "100ml Air hangat",
+                    "1 sdt ragi",
+                    "50g Paprika",
+                    "50g Jamur",
+                    "50g Keju mozzarella",
+                    "50g Saus tomat"
+                ],
+                instructions: `1. Buat adonan pizza dengan mencampur tepung, air, dan ragi.
+                2. Diamkan adonan selama 1 jam hingga mengembang.
+                3. Olesi adonan dengan saus tomat, tambahkan paprika, jamur, dan keju.
+                4. Panggang dalam oven selama 15-20 menit pada suhu 200°C.`
+            },
+            "Beef Stroganoff": {
+                ingredients: [
+                    "500g Daging sapi",
+                    "1 bawang bombay",
+                    "200g Jamur",
+                    "100ml Krim asam",
+                    "1 sdm Mustard",
+                    "Garam dan lada"
+                ],
+                instructions: `1. Potong daging sapi tipis, tumis hingga kecokelatan.
+                2. Tumis bawang bombay dan jamur, tambahkan mustard dan krim asam.
+                3. Campurkan dengan daging sapi, masak sebentar, lalu sajikan dengan peterseli.`
+            },
+            "Salmon Panggang": {
+                ingredients: [
+                    "2 fillet salmon",
+                    "2 sdm mentega",
+                    "1 sdm jus lemon",
+                    "2 siung bawang putih",
+                    "Garam dan merica"
+                ],
+                instructions: `1. Panaskan oven hingga 180°C.
+                2. Olesi salmon dengan campuran mentega, jus lemon, dan bawang putih.
+                3. Panggang selama 12-15 menit hingga salmon matang sempurna.`
+            },
+            "Kue Cokelat": {
+                ingredients: [
+                    "200g Tepung terigu",
+                    "150g Gula pasir",
+                    "100g Bubuk cokelat",
+                    "2 telur",
+                    "100g Mentega",
+                    "200ml Susu"
+                ],
+                instructions: `1. Campurkan bahan kering: tepung, gula, dan bubuk cokelat.
+                2. Tambahkan telur, mentega cair, dan susu. Aduk hingga adonan halus.
+                3. Tuangkan ke dalam loyang dan panggang di suhu 180°C selama 25-30 menit.`
+            },
+            "Sup Tomat": {
+                ingredients: [
+                    "4 buah tomat",
+                    "1 bawang bombay",
+                    "2 siung bawang putih",
+                    "500ml Kaldu sayuran",
+                    "Garam dan lada"
+                ],
+                instructions: `1. Tumis bawang bombay dan bawang putih hingga harum.
+                2. Tambahkan tomat yang sudah dipotong dan kaldu sayuran.
+                3. Rebus hingga tomat lunak, lalu blender hingga halus.
+                4. Bumbui dengan garam dan lada.`
+            },
+            "Nasi Goreng": {
+                ingredients: [
+                    "2 piring nasi",
+                    "2 telur",
+                    "1 siung bawang putih",
+                    "2 sdm kecap manis",
+                    "1 sdm saus tiram",
+                    "Garam dan lada"
+                ],
+                instructions: `1. Tumis bawang putih hingga harum.
+                2. Masukkan telur dan orak-arik hingga matang.
+                3. Tambahkan nasi, kecap manis, dan saus tiram. Aduk rata.
+                4. Bumbui dengan garam dan lada, masak hingga nasi panas sempurna.`
+            },
+            "Sate Ayam": {
+                ingredients: [
+                    "500g Daging ayam",
+                    "3 sdm kecap manis",
+                    "2 siung bawang putih",
+                    "1 sdm saus kacang",
+                    "Garam dan merica"
+                ],
+                instructions: `1. Potong daging ayam kecil-kecil dan tusukkan ke tusuk sate.
+                2. Campur kecap manis, bawang putih, garam, dan merica, lalu oleskan ke ayam.
+                3. Panggang sate hingga matang, sajikan dengan saus kacang.`
+            }
+        };
+
+        // Function to display recipe details in the modal
+        function showRecipeDetails(recipeName) {
+            const recipe = recipes[recipeName];
+            if (recipe) {
+                document.getElementById("recipeTitle").innerText = recipeName;
+                document.getElementById("recipeIngredients").innerHTML = recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('');
+                document.getElementById("recipeInstructions").innerText = recipe.instructions;
+
+                // Show the modal
+                document.getElementById("recipeModal").style.display = "block";
+            }
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById("recipeModal").style.display = "none";
+        }
+
+        // Search Functionality
+        function searchRecipes() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let recipeCards = document.getElementsByClassName("recipe-card");
+
+            for (let i = 0; i < recipeCards.length; i++) {
+                let title = recipeCards[i].getElementsByTagName("h4")[0].innerText.toLowerCase();
+                if (title.includes(input)) {
+                    recipeCards[i].style.display = "";
+                } else {
+                    recipeCards[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
